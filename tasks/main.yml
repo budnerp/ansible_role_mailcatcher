@@ -1,0 +1,32 @@
+---
+  - name: MAILCATCHER - install dependencies
+    yum:
+      name:
+        - gcc
+        - gcc-c++
+        - sqlite-devel
+        - ruby-devel
+      state: present
+
+  - name: MAILCATCHER - check for mailcatcher
+    stat:
+      path: '/usr/local/bin/mailcatcher'
+    register: mailcatcher_installed
+
+  - name: MAILCATCHER - install latest version of MailCatcher
+    command: gem install mailcatcher
+    when: not mailcatcher_installed.stat.exists
+
+  - name: MAILCATCHER - install startup script
+    template:
+      src: etc/systemd/system/mailcatcher.service.j2
+      dest: /etc/systemd/system/mailcatcher.service
+      owner: root
+      group: root
+      mode: 644
+
+  - name: MAILCATCHER -  enable and start the service
+    systemd:
+      name: mailcatcher
+      enabled: yes
+      state: started
