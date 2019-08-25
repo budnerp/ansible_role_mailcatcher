@@ -13,6 +13,14 @@
       path: '/usr/local/bin/mailcatcher'
     register: mailcatcher_installed
 
+  - name: MAILCATCHER - create /var/log/mailcatcher.log
+    file:
+      path: /var/log/mailcatcher.log
+      owner: root
+      group: root
+      mode: '0644'
+      state: touch
+
   - name: MAILCATCHER - install latest version of MailCatcher
     command: gem install mailcatcher
     when: not mailcatcher_installed.stat.exists
@@ -23,10 +31,7 @@
       dest: /etc/systemd/system/mailcatcher.service
       owner: root
       group: root
-      mode: 644
+      mode: 0644
 
-  - name: MAILCATCHER -  enable and start the service
-    systemd:
-      name: mailcatcher
-      enabled: yes
-      state: started
+  - name: MAILCATCHER - start the service
+    service: name=mailcatcher state=started

@@ -1,13 +1,16 @@
 [Unit]
 Description=MailCatcher Service
-After=network.service
+After=syslog.target network.target
 
 [Service]
-Type=simple
-;ExecStart=/usr/local/bin/mailcatcher -v --ip={{ mailcatcher_ip }} --smtp-ip={{ mailcatcher_smtp_ip }} --smtp-port={{ mailcatcher_smtp_port }} --http-ip={{ mailcatcher_http_ip }} --http-port={{ mailcatcher_http_port }} >> /var/log/mailcatcher.log 2>&1
+Type=notify
+ExecStart=/usr/local/bin/mailcatcher -v --ip={{ mailcatcher_ip }} --smtp-ip={{ mailcatcher_smtp_ip }} --smtp-port={{ mailcatcher_smtp_port }} --http-ip={{ mailcatcher_http_ip }} --http-port={{ mailcatcher_http_port }} >> /var/log/mailcatcher.log 2>&1
 ;ExecStart=/usr/local/bin/mailcatcher --ip={{ mailcatcher_ip }}
-ExecStart=/usr/local/bin/mailcatcher
 ExecStop=/bin/killall -q -v mailcatcher
+;ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartSec=42s
 
 [Install]
 WantedBy=multi-user.target
