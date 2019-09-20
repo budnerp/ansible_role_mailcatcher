@@ -34,4 +34,4 @@
       mode: 0644
 
   - name: MAILCATCHER - start the service
-    service: name=mailcatcher state=started
+    service: name=mailcatcher state=started enabled=yes
