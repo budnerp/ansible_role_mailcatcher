@@ -32,6 +32,8 @@
       owner: root
       group: root
       mode: 0644
+    notify:
+      - start mailcatcher
 
-  - name: MAILCATCHER - start the service
-    service: name=mailcatcher state=started enabled=yes
+#  - name: MAILCATCHER - start the service
+#    service: name=mailcatcher state=started enabled=yes

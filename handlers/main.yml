@@ -3,7 +3,7 @@
     service: name=mailcatcher state=stopped
 
   - name: start mailcatcher
-    service: name=mailcatcher state=started
+    service: name=mailcatcher state=started enabled=yes
 
   - name: restart mailcatcher
     service: name=mailcatcher state=restarted
